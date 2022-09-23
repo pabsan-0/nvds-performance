@@ -5,7 +5,9 @@ This repo holds an interface to benchmark FPS and latency of Deepstream pipeline
 - To store an arbitrarliy configured pipeline benchmarking for reference
 - To serve as boilerplate or reference examples to analyze pipeline performance
 
-The pipelines in here are not optimized and are meant for comparison only
+The pipelines in here are not optimized and are meant for comparison only.
+
+[TOC]
 
 ## Setup
 
@@ -23,13 +25,13 @@ Dependencies:
 
 Should run out of the box on [NVDS-Lite](https://bitbucket.org/fadacatec-ondemand/nvds-lite/src/master/) environment.
 
-## Default pipelines
+## Sample pipelines
 
 Three directories are included in here, each holding the same pipeline with a different number of input sources.
 
-- `x-raw`: these pipelines grab frames uncompressed, as raw video
-- `jpeg`: these pipelines grab frames in compressed jpeg format
-- `jpeg-sync`: these pipelines grab frames in compressed jpeg format and then force `nvdsmux` to sync all cameras before batching
+- [x-raw](https://bitbucket.org/fadacatec-ondemand/nvds-performance/src/master/x-raw/): these pipelines grab frames uncompressed, as raw video
+- [jpeg](https://bitbucket.org/fadacatec-ondemand/nvds-performance/src/master/jpeg/): these pipelines grab frames in compressed jpeg format
+- [jpeg-sync](https://bitbucket.org/fadacatec-ondemand/nvds-performance/src/master/jpeg-sync/): these pipelines grab frames in compressed jpeg format and then force `nvdsmux` to sync all cameras before batching
 
 See the benchmarking results for these in their respective folders.
 
@@ -68,6 +70,7 @@ v4l2src         v4l2src0_src    v4l2src1_src    v4l2src2_src    v4l2src3_src
 ```
 
 Some example observations to be made on this table:
+
 - The setup being examined is for three cameras: `v4l2src0_src`, `v4l2src1_src` & `v4l2src2_src`.
 - There is room for one more camera `v4l2src3_src`, which is not being used in this pipeline.
 - Looking at `v4l2src0_src `:
