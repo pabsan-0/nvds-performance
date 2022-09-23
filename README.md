@@ -52,9 +52,11 @@ After you're all set:
 
 ## Relevant notes
 
+- Average latency results are only reliable in case of balanced latency, else they are biased by leakage
 - nvv4l2dec has a `max-performance` param in some hardware. Use it if available
 - Sources getting NaN latencies have seen to be related to excessive queue leakage
 - USB cameras may be latency-unbalanced if syncing is not enforced
+- Uneven batchsizes can be more efficient if capture is slow (x-raw), for example n_cameras=2 & batch=1
 - Too many usb cameras will make the USB driver fail to allocate memory (>2)
     - Reference + tegra fix: https://forums.developer.nvidia.com/t/use-gstreamer-to-open-two-usb-cameras-failed-to-allocate-required-memory/122843
     - Lowering image resolution will ease this issue

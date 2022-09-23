@@ -1,4 +1,4 @@
-source devices.cfg
+source ../devices.cfg
 
 gst-launch-1.0                                                                                          \
     v4l2src device="$CAM_0"                                                                             \
