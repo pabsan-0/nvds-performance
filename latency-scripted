@@ -1,0 +1,77 @@
+#! /usr/bin/bash
+
+# get the camera /dev/videoX to these variables and export downstream
+source devices.cfg
+export CAM_0
+export CAM_1
+export CAM_2
+export CAM_3
+
+# Load pipeline to variable
+# Then remove non-pipeline junk and replace sink for fakesink
+PIPELINE=`cat "$1"`
+PIPELINE=`echo "$PIPELINE" | sed 's:source ../devices.cfg::'`
+PIPELINE=`echo "$PIPELINE" | sed 's:nveglglessink.*:fakesink 2> .tmplog;:'`
+
+# Select the tracer through env variables & purge previous results, if any
+export GST_DEBUG="GST_TRACER:7"
+export GST_TRACERS="interlatency"
+rm -rf gstshark_202*:*/
+
+
+# Do the shit
+echo "About to run the following pipeline:"
+echo "$PIPELINE"
+echo
+read  -n 1 -p "Abort with ^C else press Enter to continue." confirm
+echo
+#---  AWAIT FOR USER INPUT ---#
+echo
+bash -c "$PIPELINE"
+
+
+
+LOGFILE='.tmplog'
+
+# Define sources and checkpoints as stated in logs, mind these will be grepped
+sources=(
+    v4l2src           \
+    v4l2src0_src      \
+    v4l2src1_src      \
+    v4l2src2_src      \
+    v4l2src3_src      \
+    )
+checkpoints=(
+    m_src                   \
+    nvinfer0_src            \
+    nvmultistreamtiler0_src \
+    nvdsosd0_src            \
+    fakesink0_sink          \
+    )
+
+# Print headers for result output
+for SRC_HEADER in "${sources[@]}"
+do printf "$SRC_HEADER    "
+done
+echo
+# Loop and fetch results
+for CKP in "${checkpoints[@]}"
+do
+    for SRC in "${sources[@]}"
+    do
+        # Verify source (allows different # cams, e.g. when v4l2src3_src does not exist)
+        if grep -Fq $SRC $LOGFILE
+        then
+            # Latency average and stddev for this SRC->CKP route
+            var=`grep $SRC $LOGFILE | grep $CKP | grep -o -P '(?<=time=\(string\)0:00:).*(?=;$)'  | awk '{s+=$0; ss+=$0^2} END{printf "%.3f ~ %.3f", m=s/NR, sqrt(ss/NR-m^2)}'`
+            printf -- "$var   ";
+        else
+            printf -- "                ";
+        fi
+    done
+    printf "   :: $CKP"
+    echo
+done
+
+rm "$LOGFILE"
+rm -rf gstshark_2022*

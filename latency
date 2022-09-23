@@ -1,0 +1,36 @@
+#! /usr/bin/bash
+
+# get the camera /dev/videoX to these variables and export downstream
+source devices.cfg
+export CAM_0
+export CAM_1
+export CAM_2
+export CAM_3
+
+# Load pipeline to variable
+# Then remove non-pipeline junk and replace sink for fakesink
+PIPELINE=`cat "$1"`
+PIPELINE=`echo "$PIPELINE" | sed 's:source ../devices.cfg::'`
+PIPELINE=`echo "$PIPELINE" | sed 's:nveglglessink.*:fakesink; :'`
+
+# Select the tracer through env variables & purge previous results, if any
+export GST_DEBUG="GST_TRACER:7"
+export GST_TRACERS="interlatency"
+rm -rf gstshark_202*:*/
+
+
+# Do the shit
+echo "About to run the following pipeline:"
+echo "$PIPELINE"
+echo
+read  -n 1 -p "Abort with ^C else press Enter to continue." confirm
+echo
+#---  AWAIT FOR USER INPUT ---#
+echo
+bash -c "$PIPELINE"
+
+# Display interlatency results then remove temp files
+cd /nvds/opt/gst-shark/scripts/graphics/
+./gstshark-plot "$OLDPWD/gstshark_202*" -p -l inside
+cd -
+rm -rf gstshark_202*:*/

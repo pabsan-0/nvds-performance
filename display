@@ -1,0 +1,24 @@
+#! /usr/bin/bash
+
+# get the camera /dev/videoX to these variables and export downstream
+source devices.cfg
+export CAM_0
+export CAM_1
+export CAM_2
+export CAM_3
+
+# Load pipeline to variable
+# Then remove non-pipeline junk and replace sink for fakesink
+PIPELINE=`cat "$1"`
+PIPELINE=`echo "$PIPELINE" | sed 's:source ../devices.cfg::'`
+
+
+# Do the shit
+echo "About to run the following pipeline:"
+echo "$PIPELINE"
+echo
+read  -n 1 -p "Abort with ^C else press Enter to continue." confirm
+echo
+#---  AWAIT FOR USER INPUT ---#
+echo
+bash -c "$PIPELINE" ;
