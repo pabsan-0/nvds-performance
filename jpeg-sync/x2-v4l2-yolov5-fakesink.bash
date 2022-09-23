@@ -1,12 +1,12 @@
 source ../devices.cfg
 
 gst-launch-1.0                                                                                          \
-    v4l2src device="$CAM_0" ! 'image/jpeg, width=320,height=240'                                        \
+    v4l2src device="$CAM_0" ! 'image/jpeg, width=1920,height=1080'                                      \
         ! nvv4l2decoder                                                                                 \
         ! nvvideoconvert ! 'video/x-raw(memory:NVMM),format=(string)NV12'                               \
         ! queue leaky=2 max-size-buffers=100 max-size-time=0 max-size-bytes=0                           \
         ! m.sink_0                                                                                      \
-    v4l2src device="$CAM_1" ! 'image/jpeg, width=320,height=240'                                        \
+    v4l2src device="$CAM_1" ! 'image/jpeg, width=1920,height=1080'                                      \
         ! nvv4l2decoder                                                                                 \
         ! nvvideoconvert ! 'video/x-raw(memory:NVMM),format=(string)NV12'                               \
         ! queue leaky=2 max-size-buffers=100 max-size-time=0 max-size-bytes=0                           \

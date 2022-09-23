@@ -2,7 +2,7 @@ source ../devices.cfg
 
 gst-launch-1.0                                                                                          \
     v4l2src device="$CAM_0"                                                                             \
-        ! videoconvert ! 'video/x-raw,format=I420,width=320,height=240'                                 \
+        ! videoconvert ! 'video/x-raw,format=I420,width=1920,height=1080'                               \
         ! queue leaky=2 max-size-buffers=100 max-size-time=0 max-size-bytes=0                           \
         ! nvvideoconvert ! 'video/x-raw(memory:NVMM),format=(string)I420,width=320,height=240'          \
         ! m.sink_0                                                                                      \

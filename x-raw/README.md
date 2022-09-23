@@ -85,3 +85,29 @@ v4l2src         v4l2src0_src    v4l2src1_src    v4l2src2_src    v4l2src3_src
 0.010 ~ 0.042   0.004 ~ 0.001   0.006 ~ 0.008   0.015 ~ 0.062   0.014 ~ 0.036      :: nvdsosd0_src
 0.010 ~ 0.042   0.004 ~ 0.001   0.006 ~ 0.008   0.015 ~ 0.062   0.014 ~ 0.036      :: fakesink0_sink
 ```
+
+
+
+
+# x-raw high res
+```
+v4l2src width=*,height=*
+queue leaky=2 max-size-buffers=100 max-size-time=0 max-size-bytes=0
+nvstreammux name=m batch-size=1 width=640 height=640 nvbuf-memory-type=0
+```
+```
+v4l2src width=1920,height=1080
+v4l2src         v4l2src0_src    v4l2src1_src    v4l2src2_src    v4l2src3_src
+0.020 ~ 0.030   0.020 ~ 0.030                                                      :: m_src
+0.029 ~ 0.072   0.029 ~ 0.072                                                      :: nvinfer0_src
+0.029 ~ 0.072   0.029 ~ 0.072                                                      :: nvmultistreamtiler0_src
+0.029 ~ 0.072   0.029 ~ 0.072                                                      :: nvdsosd0_src
+0.029 ~ 0.072   0.029 ~ 0.072                                                      :: fakesink0_sink
+perf: fps_cam_m.sink_0; timestamp: 73:54:29.795679700; bps: 2560.000; mean_bps: 1365.333; fps: 4.770; mean_fps: 4.812
+perf: fps_fakesink; timestamp: 73:54:30.639171437; bps: 2560.000; mean_bps: 1331.200; fps: 4.751; mean_fps: 6.322
+
+
+# more than 2 cameras cant run at a resolution higher than 320x240
+
+```
+
