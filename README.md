@@ -7,7 +7,19 @@ This repo holds an interface to benchmark FPS and latency of Deepstream pipeline
 
 The pipelines in here are not optimized and are meant for comparison only.
 
-[TOC]
+
+<!-- vim-markdown-toc GFM -->
+
+* [Setup](#setup)
+* [Sample pipelines](#sample-pipelines)
+* [Testing interface](#testing-interface)
+* [Output interpretation](#output-interpretation)
+    * [Interlatency](#interlatency)
+    * [FPS](#fps)
+* [Relevant notes](#relevant-notes)
+* [Convenient extra tools](#convenient-extra-tools)
+
+<!-- vim-markdown-toc -->
 
 ## Setup
 
